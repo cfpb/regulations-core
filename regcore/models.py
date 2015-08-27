@@ -5,7 +5,7 @@ from regcore.fields import CompressedJSONField
 
 class Regulation(models.Model):
     version = models.SlugField(max_length=20)
-    label_string = models.SlugField(max_length=50)
+    label_string = models.SlugField(max_length=200)
     text = models.TextField()
     title = models.TextField(blank=True)
     node_type = models.SlugField(max_length=10)
@@ -21,7 +21,7 @@ class Regulation(models.Model):
 class Layer(models.Model):
     version = models.SlugField(max_length=20)
     name = models.SlugField(max_length=20)
-    label = models.SlugField(max_length=50)
+    label = models.SlugField(max_length=200)
     layer = CompressedJSONField()
 
     class Meta:
@@ -48,7 +48,7 @@ class NoticeCFRPart(models.Model):
 
 
 class Diff(models.Model):
-    label = models.SlugField(max_length=50)
+    label = models.SlugField(max_length=200)
     old_version = models.SlugField(max_length=20)
     new_version = models.SlugField(max_length=20)
     diff = CompressedJSONField()
