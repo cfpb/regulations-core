@@ -25,7 +25,8 @@ REGULATION_SCHEMA = {
             'items': {'type': 'string'}
         },
         'title': {'type': 'string'},
-        'node_type': {'type': 'string'}
+        'node_type': {'type': 'string'},
+        'marker': {'type': 'string'}
     }
 }
 

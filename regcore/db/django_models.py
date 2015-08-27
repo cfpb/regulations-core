@@ -7,6 +7,7 @@ from regcore.models import Diff, Layer, Notice, Regulation
 
 class DMRegulations(object):
     """Implementation of Django-models as regulations backend"""
+
     def get(self, label, version):
         """Find the regulation label + version"""
         try:
@@ -16,7 +17,8 @@ class DMRegulations(object):
                 'label': reg.label_string.split('-'),
                 'text': reg.text,
                 'node_type': reg.node_type,
-                'children': reg.children
+                'children': reg.children,
+                'marker': reg.marker
             }
             if reg.title:
                 as_dict['title'] = reg.title
@@ -26,13 +28,15 @@ class DMRegulations(object):
 
     def _transform(self, reg, version):
         """Create the Django object"""
-        return Regulation(version=version,
-                          label_string='-'.join(reg['label']),
-                          text=reg['text'],
-                          title=reg.get('title', ''),
-                          node_type=reg['node_type'],
-                          root=(len(reg['label']) == 1),
-                          children=reg['children'])
+        r = Regulation(version=version,
+                            label_string='-'.join(reg['label']),
+                            text=reg['text'],
+                            title=reg.get('title', ''),
+                            marker=reg.get('marker',''),
+                            node_type=reg['node_type'],
+                            root=(len(reg['label']) == 1),
+                            children=reg['children'])
+        return r
 
     def bulk_put(self, regs, version, root_label):
         """Store all reg objects"""
