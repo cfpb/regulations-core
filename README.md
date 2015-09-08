@@ -37,8 +37,6 @@ Requirements are retrieved and/or build automatically via pip (see below).
 * pyelasticsearch - required if using Elastic Search
 * flake8 - while not strictly required, we try to meet its standards
 * pysolr - required if using solr as a search backend
-* south - Django's migration helper. Needed if using Django Models for
-  storage
 
 ## API Docs
 
@@ -121,13 +119,13 @@ BACKENDS = {
 }
 ```
 
-Remember to run south migrations.
+Remember to run migrations.
 
 ### Django Models For Data, Elastic Search For Search
 
-If *pyelasticsearch* and *south* are installed, you can combine Django
-models and Elastic Search. Use the *regcore_read.views.es_search.search* and
-use the following backend configuration:
+If *pyelasticsearch* is installed, you can combine Django models and Elastic
+Search. Use the *regcore_read.views.es_search.search* and use the following
+backend configuration:
 
 ```python
 BACKENDS = {
@@ -138,7 +136,7 @@ BACKENDS = {
 }
 ```
 
-Be sure to also run south migration
+Be sure to also run migrations
 
 ### Elastic Search For Data and Search
 
