@@ -11,6 +11,7 @@ class Regulation(models.Model):
     node_type = models.SlugField(max_length=10)
     children = CompressedJSONField()
     root = models.BooleanField(default=False, db_index=True)
+    marker = models.CharField(max_length=10, default='')
 
     class Meta:
         index_together = (('version', 'label_string'),)

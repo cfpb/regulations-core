@@ -54,6 +54,7 @@ class Command(BaseCommand):
                     help='the base filesystem path for regulations JSON (default: ./stub)',
                     default=os.path.join(os.getcwd(), 'stub')),
 
+
         # note: because we're supporting Django 1.5, we are limited to using
         # optparse rather than the much better argparse. This means that we can only
         # accept one file per -f argument because there's no way to accept an

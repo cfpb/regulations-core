@@ -15,6 +15,7 @@ class ReusableDMRegulations(object):
                            node_type='tyty', children=[]).save()
         self.assertEqual({'text': 'ttt',
                           'label': ['a', 'b'],
+                          'marker': '',
                           'children': [],
                           'node_type': 'tyty'}, self.dmr.get('a-b', 'verver'))
 
