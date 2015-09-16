@@ -102,7 +102,8 @@ class DMNotices(object):
         if 'effective_on' in notice:
             model.effective_on = notice['effective_on']
         model.save()
-        for cfr_part in notice.get('cfr_parts', []):
+        cfr_parts = set(notice.get('cfr_parts', []))
+        for cfr_part in cfr_parts:
             model.noticecfrpart_set.create(cfr_part=cfr_part)
 
     def get(self, doc_number):
