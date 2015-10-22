@@ -10,6 +10,8 @@ import json
 import urlparse
 import logging
 
+from django import db
+
 from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
 from regcore_write.views import regulation, diff, layer, notice
@@ -223,3 +225,10 @@ class Command(BaseCommand):
                 old_version = filename_data[2]
                 new_version = filename_data[3]
                 diff.add(request, label, old_version, new_version)
+
+            # When using MySQL in Django 1.6 with very large regs it's
+            # entirely possible that the connection to the database will
+            # timeout before the transaction is done. The workaround
+            # appears to be to force the database connection closed.
+            # https://code.djangoproject.com/ticket/21597#comment:29
+            db.close_connection()
