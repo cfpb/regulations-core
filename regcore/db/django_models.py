@@ -40,9 +40,16 @@ class DMRegulations(object):
 
     def bulk_put(self, regs, version, root_label):
         """Store all reg objects"""
-        # This does not handle subparts. Ignoring that for now
-        Regulation.objects.filter(version=version,
-                                  label_string__startswith=root_label).delete()
+        # Delete any existing regulation objects for this version and
+        # root label.
+        # XXX: This does not handle subparts. Ignoring that for now
+        existing = Regulation.objects.filter(version=version,
+                                  label_string__startswith=root_label)
+        # It's possible for this queryset to be so large as to timeout
+        # the MySQL connection if executed in bulk. So this is ugly, but
+        # necessarily so.
+        map(lambda e: e.delete(), existing)
+        # Add the new objects in batches
         Regulation.objects.bulk_create(map(
             lambda r: self._transform(r, version), regs), batch_size=100)
 
