@@ -208,6 +208,8 @@ class Command(BaseCommand):
             filename_data = f.replace(stub_base + '/', '').split('/')
             file_type = filename_data[0]
 
+            logger.info('importing {}'.format(os.path.join(*filename_data)))
+
             if file_type == 'regulation':
                 label = filename_data[1]
                 version = filename_data[2]
