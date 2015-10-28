@@ -10,8 +10,12 @@ import json
 import urlparse
 import logging
 
-from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
+
+from django.core.management.base import BaseCommand, CommandError
+from django import db
+from django.conf import settings
+
 from regcore_write.views import regulation, diff, layer, notice
 
 logging.basicConfig(
@@ -198,6 +202,9 @@ class Command(BaseCommand):
             def __init__(self):
                 self.body = ''
 
+        from guppy import hpy
+        h = hpy()
+
         for f in files:
             data = json.dumps(json.load(open(f, 'r')))
             request = RequestDummy()
@@ -207,6 +214,7 @@ class Command(BaseCommand):
             file_type = filename_data[0]
 
             logger.info('importing {}'.format(os.path.join(*filename_data)))
+            print(h.heap())
 
             if file_type == 'regulation':
                 label = filename_data[1]
@@ -225,3 +233,9 @@ class Command(BaseCommand):
                 old_version = filename_data[2]
                 new_version = filename_data[3]
                 diff.add(request, label, old_version, new_version)
+
+            if settings.DEBUG:
+                # If DEBUG is enabled, memory usage will increase linearly
+                # for each JSON file imported. This should clean it up.
+                # https://docs.djangoproject.com/en/1.6/faq/models/#why-is-django-leaking-memory
+                db.reset_queries()
