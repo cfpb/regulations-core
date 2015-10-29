@@ -202,9 +202,6 @@ class Command(BaseCommand):
             def __init__(self):
                 self.body = ''
 
-        from guppy import hpy
-        h = hpy()
-
         for f in files:
             data = json.dumps(json.load(open(f, 'r')))
             request = RequestDummy()
@@ -214,7 +211,6 @@ class Command(BaseCommand):
             file_type = filename_data[0]
 
             logger.info('importing {}'.format(os.path.join(*filename_data)))
-            print(h.heap())
 
             if file_type == 'regulation':
                 label = filename_data[1]
