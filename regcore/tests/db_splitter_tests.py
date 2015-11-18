@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from mock import patch
 
 from regcore.db.splitter import *
@@ -10,7 +10,7 @@ from regcore.models import Diff, Layer, Notice, Regulation
 from regcore.tests import db_django_models_tests as dm
 
 
-class SplitterRegulationsTest(TestCase, dm.ReusableDMRegulations):
+class SplitterRegulationsTest(TransactionTestCase, dm.ReusableDMRegulations):
     @patch('regcore.db.es.ElasticSearch')
     def setUp(self, es):
         Regulation.objects.all().delete()
