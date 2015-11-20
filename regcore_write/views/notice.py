@@ -1,4 +1,5 @@
-import anyjson
+import json
+
 from django.views.decorators.csrf import csrf_exempt
 
 from regcore import db
@@ -9,7 +10,7 @@ from regcore.responses import success, user_error
 def add(request, docnum):
     """Add the notice to the db"""
     try:
-        notice = anyjson.deserialize(request.body)
+        notice = json.loads(request.body)
     except ValueError:
         return user_error('invalid format')
 
