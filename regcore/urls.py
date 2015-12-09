@@ -35,6 +35,7 @@ if 'regcore_write' in settings.INSTALLED_APPS:
         mapping['diff'][verb] = wdiff.add
         mapping['layer'][verb] = wlayer.add
         mapping['notice'][verb] = wnotice.add
+        mapping['notices'][verb] = wnotice.add_all
         mapping['regulation'][verb] = wregulation.add
 
 
@@ -55,8 +56,8 @@ urlpatterns = patterns(
 
     by_verb_url(r'^notice/%s/%s$' % (seg('part'), seg('docnum')),
                 'notice', mapping['notice']),
-    by_verb_url(r'^notice/%s$' % seg('part'),
-                'notice', mapping['notices']),
+    by_verb_url(r'^notice/%s$' % seg('part_or_docnum'),
+                'notices-for-part', mapping['notices']),
     by_verb_url(r'^notice$', 'notices', mapping['notices']),
 
     by_verb_url(r'^regulation/%s/%s$' % (seg('label_id'), seg('version')),

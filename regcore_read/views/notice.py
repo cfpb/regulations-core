@@ -2,8 +2,9 @@ from regcore import db
 from regcore.responses import four_oh_four, success
 
 
-def get(request, part, docnum):
+def get(request, part_or_docnum, docnum):
     """ Find and return the notice with this docnum and part """
+    part = part_or_docnum
     notice = db.Notices().get(document_number=docnum, cfr_part=part)
     if notice:
         return success(notice)
@@ -11,8 +12,9 @@ def get(request, part, docnum):
         return four_oh_four()
 
 
-def listing(request, part=None):
+def listing(request, part_or_docnum=None):
     """Find and return all notices"""
+    part = part_or_docnum
     return success({
         'results': db.Notices().listing(part=part)
     })
