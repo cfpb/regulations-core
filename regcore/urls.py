@@ -48,16 +48,22 @@ urlpatterns = patterns(
     by_verb_url(r'^diff/%s/%s/%s$' % (seg('label_id'), seg('old_version'),
                                       seg('new_version')),
                 'diff', mapping['diff']),
+
     by_verb_url(r'^layer/%s/%s/%s$' % (seg('name'), seg('label_id'),
                                        seg('version')),
                 'layer', mapping['layer']),
-    by_verb_url(r'^notice/%s$' % seg('docnum'),
+
+    by_verb_url(r'^notice/%s/%s$' % (seg('part'), seg('docnum')),
                 'notice', mapping['notice']),
+    by_verb_url(r'^notice/%s$' % seg('part'),
+                'notice', mapping['notices']),
+    by_verb_url(r'^notice$', 'notices', mapping['notices']),
+
     by_verb_url(r'^regulation/%s/%s$' % (seg('label_id'), seg('version')),
                 'regulation', mapping['regulation']),
-    by_verb_url(r'^notice$', 'notices', mapping['notices']),
-    by_verb_url(r'^regulation$', 'all-reg-versions', mapping['reg-versions']),
     by_verb_url(r'^regulation/%s$' % seg('label_id'),
                 'reg-versions', mapping['reg-versions']),
+    by_verb_url(r'^regulation$', 'all-reg-versions', mapping['reg-versions']),
+
     by_verb_url(r'^search$', 'search', mapping['search'])
 )
