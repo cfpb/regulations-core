@@ -16,6 +16,7 @@ class Migration(DataMigration):
                 new_notice = orm.NewNotice(
                         document_number=notice.document_number,
                         cfr_part=cfr_part.cfr_part,
+                        effective_on=notice.effective_on,
                         fr_url=notice.fr_url,
                         publication_date=notice.publication_date,
                         notice=notice.notice)
@@ -36,6 +37,7 @@ class Migration(DataMigration):
                 if len(existing_notices) == 0 \
                 else orm.Notice(
                     document_number=notice.document_number,
+                    effective_on=notice.effective_on,
                     fr_url=notice.fr_url,
                     publication_date=notice.publication_date,
                     notice=notice.notice)
