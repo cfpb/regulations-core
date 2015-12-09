@@ -54,7 +54,7 @@ urlpatterns = patterns(
                                        seg('version')),
                 'layer', mapping['layer']),
 
-    by_verb_url(r'^notice/%s/%s$' % (seg('part'), seg('docnum')),
+    by_verb_url(r'^notice/%s/%s$' % (seg('part_or_docnum'), seg('docnum')),
                 'notice', mapping['notice']),
     by_verb_url(r'^notice/%s$' % seg('part_or_docnum'),
                 'notices-for-part', mapping['notices']),

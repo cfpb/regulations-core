@@ -5,7 +5,7 @@ from regcore.responses import four_oh_four, success
 def get(request, part_or_docnum, docnum):
     """ Find and return the notice with this docnum and part """
     part = part_or_docnum
-    notice = db.Notices().get(document_number=docnum, cfr_part=part)
+    notice = db.Notices().get(doc_number=docnum, part=part)
     if notice:
         return success(notice)
     else:
