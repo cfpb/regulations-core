@@ -41,10 +41,14 @@ class DMRegulations(object):
     def bulk_put(self, regs, version, root_label):
         """Store all reg objects"""
         # This does not handle subparts. Ignoring that for now
-        Regulation.objects.filter(version=version,
-                                  label_string__startswith=root_label).delete()
-        Regulation.objects.bulk_create(map(
-            lambda r: self._transform(r, version), regs), batch_size=100)
+        try:
+            Regulation.objects.filter(version=version,
+                                      label_string__startswith=root_label).delete()
+            Regulation.objects.bulk_create(map(
+                lambda r: self._transform(r, version), regs), batch_size=100)
+        except Exception as ex:
+            print ex
+            raise ex
 
     def listing(self, label=None):
         """List regulation version-label pairs that match this label (or are
