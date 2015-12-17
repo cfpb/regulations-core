@@ -1,6 +1,6 @@
 from datetime import date
 
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 
 from regcore.db.django_models import *
 from regcore.models import Diff, Layer, Notice, Regulation
@@ -44,7 +44,7 @@ class ReusableDMRegulations(object):
         self.assertEqual([('ver1', '1111'), ('ver2', '1111')], results)
 
 
-class DMRegulationsTest(TestCase, ReusableDMRegulations):
+class DMRegulationsTest(TransactionTestCase, ReusableDMRegulations):
     def setUp(self):
         Regulation.objects.all().delete()
         self.dmr = DMRegulations()

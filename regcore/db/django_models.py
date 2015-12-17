@@ -1,6 +1,8 @@
+#vim: set encoding=utf-8
 """Each of the data structures relevant to the API (regulations, notices,
 etc.), implemented using Django models"""
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
 
 from regcore.models import Diff, Layer, Notice, Regulation
 
@@ -39,16 +41,25 @@ class DMRegulations(object):
         return r
 
     def bulk_put(self, regs, version, root_label):
-        """Store all reg objects"""
-        # This does not handle subparts. Ignoring that for now
-        try:
-            Regulation.objects.filter(version=version,
-                                      label_string__startswith=root_label).delete()
-            Regulation.objects.bulk_create(map(
-                lambda r: self._transform(r, version), regs), batch_size=100)
-        except Exception as ex:
-            print ex
-            raise ex
+        # Delete any existing regulation objects for this version and
+        # root label.
+        # NOTE: There seems to be some inconsistency in Django's ORM 
+        # behavior across versions and particular instances. To ensure 
+        # that the query is executed in:
+        #   (a) a timely manner, 
+        #   (b) efficiently, 
+        # we're using raw SQL here.
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM regcore_regulation WHERE'
+                       '(regcore_regulation.version = %s AND'
+                       ' regcore_regulation.label_string LIKE %s)',
+                       [version, root_label + '%'])
+        connection.commit()
+
+        # Add the new objects in batches
+        Regulation.objects.bulk_create(map(
+            lambda r: self._transform(r, version), regs), batch_size=100)
+
 
     def listing(self, label=None):
         """List regulation version-label pairs that match this label (or are
