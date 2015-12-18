@@ -114,11 +114,18 @@ class Command(BaseCommand):
         # Get notice JSON
         logger.info("getting notice files for regulation {}...".format(regulation))
         for dirname, subdirs, files in os.walk(os.path.join(stub_base, 'notice')):
-            # Notices are not stored in a regulation-part-number
+            # Notices did not used to be stored in a regulation-part-number
             # subdirectory. Use notice_names, from above, to just grab the
             # ones we want.
             notice_files = [os.path.join(dirname, f) for f in files if f in notice_names]
             regulation_files.extend(notice_files)
+
+            # Check to see if we have newer-generated notices that *are*
+            # in a regulation-part-number subdirectory.
+            if dirname.endswith(regulation):
+                notice_files = [os.path.join(dirname, f) for f in files if f in notice_names]
+                regulation_files.extend(notice_files)
+            
 
         # Get layer JSON
         logger.info("getting layer files for regulation {}...".format(regulation))
@@ -217,8 +224,12 @@ class Command(BaseCommand):
                 version = filename_data[2]
                 regulation.add(request, label, version)
             elif file_type == 'notice':
+                part = options['regulation']
                 version = filename_data[1]
-                notice.add(request, version)
+                # Handle new-style per-part notices
+                if version == part:
+                    version = filename_data[2]
+                notice.add(request, part, version)
             elif file_type == 'layer':
                 layer_type = filename_data[1]
                 label = filename_data[2]

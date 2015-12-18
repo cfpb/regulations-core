@@ -45,9 +45,9 @@ class SplitterNotices(object):
         self.get = self.dm.get
         self.listing = self.dm.listing
 
-    def put(self, doc_number, notice):
+    def put(self, doc_number, part, notice):
         """Write to both"""
-        self.dm.put(doc_number, notice)
+        self.dm.put(doc_number, part, notice)
         self.es.put(doc_number, notice)
 
 
