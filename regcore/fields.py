@@ -1,7 +1,7 @@
 import base64
 import bz2
+import json
 
-import anyjson
 from django.db import models
 from django.db.models.fields.subclassing import Creator
 from south.modelsinspector import add_introspection_rules
@@ -49,7 +49,7 @@ class CompressedJSONField(models.TextField):
         encoding = reversed(encoding)
         for encoding_type in encoding:
             if encoding_type == 'j':
-                content = anyjson.deserialize(content)
+                content = json.loads(content)
             elif encoding_type == '6':
                 content = base64.decodestring(content)
             elif encoding_type == 'b':
@@ -57,7 +57,7 @@ class CompressedJSONField(models.TextField):
         return content
 
     def get_prep_value(self, value):
-        value = anyjson.serialize(value)
+        value = json.dumps(value)
         encoding = 'j'
 
         if len(value) > 1000:  # somewhat arbitrary length to start compression

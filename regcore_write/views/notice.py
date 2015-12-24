@@ -1,4 +1,5 @@
-import anyjson
+import json
+
 from django.views.decorators.csrf import csrf_exempt
 
 from regcore import db
@@ -27,7 +28,7 @@ def add_all(request, part_or_docnum):
     docnum = part_or_docnum
 
     try:
-        notice = anyjson.deserialize(request.body)
+        notice = json.loads(request.body)
     except ValueError:
         return user_error('invalid format')
 
