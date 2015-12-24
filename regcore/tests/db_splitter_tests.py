@@ -153,7 +153,7 @@ class SplitterNoticesTest(TestCase, dm.ReusableDMNotices):
                'fr_url': 'http://example.com',
                'publication_date': '2010-02-02',
                'cfr_parts': ['222']}
-        sn.put('docdoc', doc)
+        sn.put('docdoc', '222', doc)
 
         notices = Notice.objects.all()
         self.assertEqual(1, len(notices))
@@ -161,9 +161,7 @@ class SplitterNoticesTest(TestCase, dm.ReusableDMNotices):
         self.assertEqual(date(2011, 1, 1), notices[0].effective_on)
         self.assertEqual('http://example.com', notices[0].fr_url)
         self.assertEqual(date(2010, 2, 2), notices[0].publication_date)
-        ncp = notices[0].noticecfrpart_set.all()
-        self.assertEqual(1, len(ncp))
-        self.assertEqual('222', ncp[0].cfr_part)
+        self.assertEqual('222', notices[0].cfr_part)
         self.assertEqual(doc, notices[0].notice)
 
         self.assertTrue(es.return_value.index.called)
@@ -182,14 +180,14 @@ class SplitterNoticesTest(TestCase, dm.ReusableDMNotices):
                'fr_url': 'http://example.com',
                'publication_date': '2010-02-02',
                'cfr_part': '222'}
-        sn.put('docdoc', doc)
+        sn.put('docdoc', '222', doc)
 
         notices = Notice.objects.all()
         self.assertEqual(1, len(notices))
         self.assertEqual('http://example.com', notices[0].fr_url)
 
         doc['fr_url'] = 'url2'
-        sn.put('docdoc', doc)
+        sn.put('docdoc', '222', doc)
 
         notices = Notice.objects.all()
         self.assertEqual(1, len(notices))

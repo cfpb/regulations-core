@@ -30,21 +30,16 @@ class Layer(models.Model):
 
 
 class Notice(models.Model):
-    document_number = models.SlugField(max_length=20, primary_key=True)
+    document_number = models.SlugField(max_length=20)
+    cfr_part = models.SlugField(max_length=200)
     effective_on = models.DateField(null=True)
     fr_url = models.CharField(max_length=200)
     publication_date = models.DateField()
     notice = CompressedJSONField()
 
-
-class NoticeCFRPart(models.Model):
-    """Represents the one-to-many relationship between notices and CFR parts"""
-    cfr_part = models.SlugField(max_length=10, db_index=True)
-    notice = models.ForeignKey(Notice)
-
     class Meta:
-        index_together = (('notice', 'cfr_part'),)
-        unique_together = (('notice', 'cfr_part'),)
+        index_together = (('document_number', 'cfr_part'),)
+        unique_together = (('document_number', 'cfr_part'),)
 
 
 class Diff(models.Model):
