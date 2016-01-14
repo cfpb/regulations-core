@@ -1,0 +1,74 @@
+from __future__ import print_function
+
+import logging
+
+from optparse import make_option
+from django.core.management.base import BaseCommand, CommandError
+from django import db
+from django.db import connection
+
+from regcore.models import *
+
+logging.basicConfig(
+        format='%(asctime)s %(levelname)s: %(message)s', 
+        datefmt='%m/%d/%Y %I:%M:%S %p')
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
+class Command(BaseCommand):
+    """
+    WARNING: This command DELETES all traces of a particular regulation from the database.
+    DO NOT use this command unless you're really, really sure that you know what you're doing,
+    and DEFINITELY do not use it in production. This is for debugging ONLY!
+    """
+
+    help = 'Delete all data pertaining to a specified CFR part from the database'
+
+    option_list = BaseCommand.option_list + (
+        make_option('-r',
+                    '--regulation',
+                    nargs=1,
+                    action='store',
+                    type=str,
+                    help='the specific regulation part number to upload (e.g.: 1026)'),)
+
+    def handle(self, *args, **options):
+
+        if options['regulation'] is None:
+            raise CommandError('Must supply a regulation to delete (e.g. 1026).')
+
+        result = raw_input('WARNING: This will DELETE all traces of the specified reg from the database! Are you'
+                           ' absolutely sure you want to do this? (yes/no): ')
+
+        while result.lower() != 'yes' and result.lower() != 'no':
+            result = raw_input('Please type "yes" to confirm or "no" to abort: ')
+
+
+        if result.lower() == 'yes':
+
+            reg = options['regulation']
+
+            notices = Notice.objects.filter(cfr_part=reg)
+            doc_numbers = [notice.document_number for notice in notices]
+
+            cursor = connection.cursor()
+
+            print(doc_numbers)
+
+            # manually delete all the regulation elements
+            for doc_number in doc_numbers:
+                logging.info('Deleting version {} for regulation {}'.format(doc_number, reg))
+                # delete all layer elements
+                cursor.execute('DELETE FROM regcore_layer WHERE version = "{}"'.format(doc_number))
+                # delete all regulation elements
+                cursor.execute('DELETE FROM regcore_regulation WHERE version = "{}"'.format(doc_number))
+                # delete all diff elements
+                cursor.execute('DELETE FROM regcore_diff WHERE old_version = "{}"'.format(doc_number))
+                cursor.execute('DELETE FROM regcore_diff WHERE new_version = "{}"'.format(doc_number))
+
+            # finish cleanup by deleting notice elements
+            for notice in notices:
+                notice.delete()
+
+        logging.info('Regulation {} has been wiped from the database!'.format(reg))

@@ -41,7 +41,6 @@ class DMRegulations(object):
         return r
 
     def bulk_put(self, regs, version, root_label):
-        """Store all reg objects"""
         # Delete any existing regulation objects for this version and
         # root label.
         # NOTE: There seems to be some inconsistency in Django's ORM 
@@ -60,6 +59,7 @@ class DMRegulations(object):
         # Add the new objects in batches
         Regulation.objects.bulk_create(map(
             lambda r: self._transform(r, version), regs), batch_size=100)
+
 
     def listing(self, label=None):
         """List regulation version-label pairs that match this label (or are
