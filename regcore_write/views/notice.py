@@ -12,7 +12,7 @@ def add(request, part_or_docnum, docnum):
     part = part_or_docnum
 
     try:
-        notice = anyjson.deserialize(request.body)
+        notice = json.loads(request.body)
     except ValueError:
         return user_error('invalid format')
 
