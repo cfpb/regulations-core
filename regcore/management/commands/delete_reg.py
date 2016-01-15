@@ -54,21 +54,19 @@ class Command(BaseCommand):
 
             cursor = connection.cursor()
 
-            print(doc_numbers)
-
             # manually delete all the regulation elements
             for doc_number in doc_numbers:
-                logging.info('Deleting version {} for regulation {}', doc_number, reg)
+                logging.info('Deleting version {0} for regulation {1}', doc_number, reg)
                 # delete all layer elements
-                cursor.execute('DELETE FROM regcore_layer WHERE version = "{}"'.format(doc_number))
+                cursor.execute('DELETE FROM regcore_layer WHERE version = "{0}"'.format(doc_number))
                 # delete all regulation elements
-                cursor.execute('DELETE FROM regcore_regulation WHERE version = "{}"'.format(doc_number))
+                cursor.execute('DELETE FROM regcore_regulation WHERE version = "{0}"'.format(doc_number))
                 # delete all diff elements
-                cursor.execute('DELETE FROM regcore_diff WHERE old_version = "{}"'.format(doc_number))
-                cursor.execute('DELETE FROM regcore_diff WHERE new_version = "{}"'.format(doc_number))
+                cursor.execute('DELETE FROM regcore_diff WHERE old_version = "{0}"'.format(doc_number))
+                cursor.execute('DELETE FROM regcore_diff WHERE new_version = "{0}"'.format(doc_number))
 
             # finish cleanup by deleting notice elements
             for notice in notices:
                 notice.delete()
 
-        logging.info('Regulation {} has been wiped from the database!'.format(reg))
+        logging.info('Regulation {} has been wiped from the database!', reg)
