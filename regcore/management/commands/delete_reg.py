@@ -58,7 +58,7 @@ class Command(BaseCommand):
 
             # manually delete all the regulation elements
             for doc_number in doc_numbers:
-                logging.info('Deleting version {} for regulation {}'.format(doc_number, reg))
+                logging.info('Deleting version {} for regulation {}', doc_number, reg)
                 # delete all layer elements
                 cursor.execute('DELETE FROM regcore_layer WHERE version = "{}"'.format(doc_number))
                 # delete all regulation elements
