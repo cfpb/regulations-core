@@ -58,12 +58,20 @@ class Command(BaseCommand):
             for doc_number in doc_numbers:
                 logging.info('Deleting version {0} for regulation {1}', doc_number, reg)
                 # delete all layer elements
-                cursor.execute('DELETE FROM regcore_layer WHERE version = "{0}"'.format(doc_number))
+                cursor.execute(
+                    'DELETE FROM regcore_layer WHERE version= %s', 
+                    [doc_number])
                 # delete all regulation elements
-                cursor.execute('DELETE FROM regcore_regulation WHERE version = "{0}"'.format(doc_number))
+                cursor.execute(
+                    'DELETE FROM regcore_regulation WHERE version = %s',
+                    [doc_number])
                 # delete all diff elements
-                cursor.execute('DELETE FROM regcore_diff WHERE old_version = "{0}"'.format(doc_number))
-                cursor.execute('DELETE FROM regcore_diff WHERE new_version = "{0}"'.format(doc_number))
+                cursor.execute(
+                    'DELETE FROM regcore_diff WHERE old_version = %s',
+                    [doc_number])
+                cursor.execute(
+                    'DELETE FROM regcore_diff WHERE new_version = %s',
+                    [doc_number])
 
             # finish cleanup by deleting notice elements
             for notice in notices:
