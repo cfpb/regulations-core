@@ -1,4 +1,5 @@
-import anyjson
+import json
+
 from django.views.decorators.csrf import csrf_exempt
 
 from regcore import db
@@ -25,7 +26,7 @@ def child_label_of(lhs, rhs):
 def add(request, name, label_id, version):
     """Add the layer node and all of its children to the db"""
     try:
-        layer = anyjson.deserialize(request.body)
+        layer = json.loads(request.body)
     except ValueError:
         return user_error('invalid format')
 

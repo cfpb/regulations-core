@@ -41,7 +41,6 @@ class DMRegulations(object):
         return r
 
     def bulk_put(self, regs, version, root_label):
-        """Store all reg objects"""
         # Delete any existing regulation objects for this version and
         # root label.
         # NOTE: There seems to be some inconsistency in Django's ORM 
@@ -60,6 +59,7 @@ class DMRegulations(object):
         # Add the new objects in batches
         Regulation.objects.bulk_create(map(
             lambda r: self._transform(r, version), regs), batch_size=100)
+
 
     def listing(self, label=None):
         """List regulation version-label pairs that match this label (or are
@@ -106,35 +106,39 @@ class DMLayers(object):
 
 class DMNotices(object):
     """Implementation of Django-models as notice backend"""
-    def put(self, doc_number, notice):
-        """Store a single notice"""
-        Notice.objects.filter(document_number=doc_number).delete()
+
+    def put(self, doc_number, part, notice):
+        """ Store a single notice """
+
+        Notice.objects.filter(document_number=doc_number,
+                cfr_part=part).delete()
 
         model = Notice(document_number=doc_number,
+                       cfr_part=part,
                        fr_url=notice['fr_url'],
                        publication_date=notice['publication_date'],
                        notice=notice)
+
         if 'effective_on' in notice:
             model.effective_on = notice['effective_on']
-        model.save()
-        cfr_parts = set(notice.get('cfr_parts', []))
-        for cfr_part in cfr_parts:
-            model.noticecfrpart_set.create(cfr_part=cfr_part)
 
-    def get(self, doc_number):
-        """Find the associated notice"""
+        model.save()
+
+    def get(self, doc_number, part):
+        """ Find the associated notice """
         try:
             return Notice.objects.get(
-                document_number=doc_number).notice
+                document_number=doc_number, cfr_part=part).notice
         except ObjectDoesNotExist:
             return None
 
     def listing(self, part=None):
-        """All notices or filtered by cfr_part"""
+        """ All notices or filtered by cfr_part """
         query = Notice.objects
-        if part:
-            query = query.filter(noticecfrpart__cfr_part=part)
-        results = query.values('document_number', 'effective_on', 'fr_url',
+        if part is not None:
+            query = query.filter(cfr_part=part)
+        results = query.values('document_number', 'cfr_part', 
+                               'effective_on', 'fr_url', 
                                'publication_date')
         for result in results:
             for key in ('effective_on', 'publication_date'):
