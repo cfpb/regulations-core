@@ -4,7 +4,6 @@ import json
 
 from django.db import models
 from django.db.models.fields.subclassing import Creator
-from south.modelsinspector import add_introspection_rules
 
 
 class PatchedSubFieldBase(type):
@@ -73,5 +72,7 @@ class CompressedJSONField(models.TextField):
         if instance is None:
             return self
 
-
-add_introspection_rules([], ["^regcore\.fields\.CompressedJSONField"])
+    def deconstruct(self):
+        name, path, args, kwargs = super(
+            CompressedJSONField, self).deconstruct()
+        return name, path, args, kwargs

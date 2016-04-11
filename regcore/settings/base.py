@@ -10,8 +10,8 @@ INSTALLED_APPS = [
     'regcore',
     'regcore_read',
     'regcore_write',
-    'south'
 ]
+MIDDLEWARE_CLASSES = []
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 
@@ -46,8 +46,7 @@ ELASTIC_SEARCH_INDEX = 'eregs'
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://localhost:8983/solr'
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
     }
 }
 
