@@ -57,7 +57,7 @@ $ pip install -r requirements_dev.txt   # helpful modules for developers
 
 With that, you just need a few additional commands to get up and running:
 ```bash
-$ python manage.py syncdb --migrate
+$ python manage.py migrate
 $ python manage.py runserver
 ```
 
