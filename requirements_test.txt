@@ -1,3 +1,5 @@
+pyelasticsearch
+pysolr
 django-nose
 mock
 nose
