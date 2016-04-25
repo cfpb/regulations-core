@@ -3,4 +3,3 @@ django-haystack
 jsonschema
 pyelasticsearch
 pysolr
-south
