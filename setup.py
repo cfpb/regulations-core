@@ -13,8 +13,6 @@ setup(
         'django',
         'django-haystack',
         'jsonschema',
-        'pyelasticsearch',
-        'pysolr',
     ],
     classifiers=[
         'License :: Public Domain',
