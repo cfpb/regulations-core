@@ -6,6 +6,7 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django import db
 from django.db import connection
+from django.core import validators
 
 from regcore.models import *
 
@@ -48,6 +49,7 @@ class Command(BaseCommand):
         if result.lower() == 'yes':
 
             reg = options['regulation']
+            validators.validate_slug(reg)
 
             notices = Notice.objects.filter(cfr_part=reg)
             doc_numbers = [notice.document_number for notice in notices]
