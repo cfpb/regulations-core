@@ -1,8 +1,7 @@
 import json
-from unittest import TestCase
+from django.test import TestCase
 
 from regcore.responses import *
-
 
 class ResponsesTest(TestCase):
 
@@ -24,3 +23,4 @@ class ResponsesTest(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual('application/json', response['Content-type'])
         self.assertEqual(structure, json.loads(response.content))
+

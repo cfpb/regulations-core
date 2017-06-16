@@ -2,14 +2,15 @@
 
 from datetime import date
 
-from django.test import TestCase, TransactionTestCase
+from django.test import TestCase, TransactionTestCase, override_settings
 from mock import patch
 
 from regcore.db.splitter import *
 from regcore.models import Diff, Layer, Notice, Regulation
-from regcore.tests import db_django_models_tests as dm
+from regcore.tests import test_db_django_models as dm
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class SplitterRegulationsTest(TransactionTestCase, dm.ReusableDMRegulations):
     @patch('regcore.db.es.ElasticSearch')
     def setUp(self, es):
@@ -81,6 +82,7 @@ class SplitterRegulationsTest(TransactionTestCase, dm.ReusableDMRegulations):
         self.assertEqual('tyty2', regs[0].node_type)
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class SplitterLayersTest(TestCase, dm.ReusableDMLayers):
     @patch('regcore.db.es.ElasticSearch')
     def setUp(self, es):
@@ -139,6 +141,7 @@ class SplitterLayersTest(TestCase, dm.ReusableDMLayers):
         self.assertEqual({'111-23': [1]}, layers[0].layer)
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class SplitterNoticesTest(TestCase, dm.ReusableDMNotices):
     @patch('regcore.db.es.ElasticSearch')
     def setUp(self, es):
@@ -194,6 +197,7 @@ class SplitterNoticesTest(TestCase, dm.ReusableDMNotices):
         self.assertEqual('url2', notices[0].fr_url)
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class SplitterDiffTest(TestCase, dm.ReusableDMDiff):
     @patch('regcore.db.es.ElasticSearch')
     def setUp(self, es):

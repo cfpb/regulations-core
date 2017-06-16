@@ -1,11 +1,11 @@
-from unittest import TestCase
+from django.test import TestCase, override_settings
 
 from mock import patch
 from pyelasticsearch.exceptions import ElasticHttpNotFoundError
 
 from regcore.db.es import *
 
-
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class ESRegulationsTest(TestCase):
 
     @patch('regcore.db.es.ElasticSearch')
@@ -82,6 +82,7 @@ class ESRegulationsTest(TestCase):
         self.assertFalse('ll' in str(es.return_value.search.call_args[0][0]))
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class ESLayersTest(TestCase):
 
     @patch('regcore.db.es.ElasticSearch')
@@ -130,6 +131,7 @@ class ESLayersTest(TestCase):
         self.assertEqual(transformed, args[2])
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class ESNoticesTest(TestCase):
 
     @patch('regcore.db.es.ElasticSearch')
@@ -187,6 +189,7 @@ class ESNoticesTest(TestCase):
         self.assertTrue('876' in str(es.return_value.search.call_args[0][0]))
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class ESDiffTest(TestCase):
 
     @patch('regcore.db.es.ElasticSearch')

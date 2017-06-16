@@ -15,6 +15,7 @@ MIDDLEWARE_CLASSES = []
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', get_random_string(50))
 
+ALLOWED_HOSTS = ['testserver']
 
 DATABASES = {
     'default': {
@@ -54,3 +55,6 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+import django
+django.setup()

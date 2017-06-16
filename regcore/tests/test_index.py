@@ -1,9 +1,10 @@
 from regcore.index import *
 from mock import patch
 from pyelasticsearch.exceptions import IndexAlreadyExistsError
-from unittest import TestCase
+from django.test import TestCase, override_settings
 
 
+@override_settings(ELASTIC_SEARCH_URLS=[], ELASTIC_SEARCH_INDEX='eregs')
 class IndexTest(TestCase):
 
     @patch('regcore.index.ElasticSearch')
