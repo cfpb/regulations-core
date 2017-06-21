@@ -1,5 +1,5 @@
 import json
-from unittest import TestCase
+from django.test import TestCase
 
 from django.test.client import Client
 from mock import patch
