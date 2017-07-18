@@ -200,11 +200,11 @@ $ sphinx-apidoc -F -o docs regcore_write
 ##  Importing Regulation JSON
 
 There is a `django_admin` command that facilitates the import of JSON
-regulation content into the database. The command is called `import_reg` and
+regulation content into the database. The command is called `regcore_import_reg` and
 is used as follows, from the root `regcore` directory.
 
 ```bash
-$ python manage.py import_reg -r <regulation-number> -s <path/to/stub/root>
+$ python manage.py regcore_import_reg -r <regulation-number> -s <path/to/stub/root>
 ```
 
 For an example of JSON content, see `[regulations-stub](https://github.com/cfpb/regulations-stub/)`
