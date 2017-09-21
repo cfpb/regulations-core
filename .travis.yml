@@ -1,11 +1,20 @@
 language: python
 sudo: false
 python:
-    - "2.7"
-install: 
-    - pip install -r requirements.txt
-    - pip install -r requirements_test.txt
+- '2.7'
+install:
+- pip install -r requirements.txt
+- pip install -r requirements_test.txt
 script:
-    python manage.py test
-after_success:
-    coveralls
+    - python manage.py test
+    - python setup.py bdist_wheel
+after_success: coveralls
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: MTnPUQhwYSgaTSWw6/TKhqwOnwtBj5ahRIpze6D7Rqy4551TWNNF/BmMxy1k30ml6y3/GRk2xMSbLoHkB0yQ8cVFflJvznE6Bv4dAI/iyB4Hgy977a3x2Jw6fIa4e+hGiS8BkkQFyUb/PFWUM0oKQ9xdYLa6WSIXbuaH3tUzQy4=
+  file_glob: true
+  file: dist/*.whl
+  on:
+    tags: true
