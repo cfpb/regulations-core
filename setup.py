@@ -10,7 +10,7 @@ setup(
         'regcore': ['templates/search/indexes/regcore/regulation_text.txt'],
     },
     install_requires=[
-        'django',
+        'django>=1.8,<1.12',
         'django-haystack',
         'jsonschema',
     ],
