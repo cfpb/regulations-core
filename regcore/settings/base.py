@@ -4,6 +4,8 @@ import os
 
 from django.utils.crypto import get_random_string
 
+import dj_database_url
+
 
 INSTALLED_APPS = [
     'haystack',
@@ -22,6 +24,9 @@ DATABASES = {
         'NAME': 'eregs.db'
     }
 }
+
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config()
 
 TEST_RUNNER = 'django_nose.runner.NoseTestSuiteRunner'
 

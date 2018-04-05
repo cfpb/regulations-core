@@ -5,3 +5,4 @@ mock
 nose
 coverage
 coveralls
+dj-database-url==0.4.2
